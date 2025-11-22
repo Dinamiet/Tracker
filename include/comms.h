@@ -3,7 +3,7 @@
 
 #include "atterminal.h"
 
-extern ATTerminal* at;
+extern ATTerminal* atTerm;
 
 void Comms_Setup();
 void Comms_Process();
