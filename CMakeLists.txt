@@ -99,5 +99,5 @@ add_subdirectory(lib)
 target_link_libraries(
 	${PROJECT_NAME}
 	PRIVATE
-
+		SIM868
 )
