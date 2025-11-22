@@ -1,1 +1,6 @@
-int main() { return 0; }
+int main()
+{
+	Serial_Setup("/dev/ttyUSB0");
+
+	return 0;
+}
