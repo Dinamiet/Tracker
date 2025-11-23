@@ -3,6 +3,10 @@
 
 #include "atterminal.h"
 
+void GSM_EnableNetworkStatusUpdates(ATTerminal* at, bool enable);
 void GSM_NetworkChange(ATTerminal* at, char* param);
+
+void GSM_InternetConnect(ATTerminal* at);
+bool GSM_InternetInitialized();
 
 #endif

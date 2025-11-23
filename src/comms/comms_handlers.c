@@ -9,6 +9,7 @@ void Ready_Handler(ATTerminal* at, char* param)
 	(void)param; // Unused
 
 	SIM868_Misc_CommandEcho(at, false);
+	printf("Device Ready\n");
 }
 
 void Default_Handler(ATTerminal* at, char* param)
