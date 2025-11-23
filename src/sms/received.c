@@ -1,6 +1,8 @@
 #include "sim868_sms.h"
 #include "sms.h"
 
+#include <stdio.h>
+
 void SMS_ReceivedNewMsg(ATTerminal* at, char* param)
 {
 	uint8_t index = SIM868_SMS_ParseNewMsg(param);
