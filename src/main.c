@@ -1,5 +1,6 @@
 #include "comms.h"
 #include "serial.h"
+#include "tracking.h"
 #include "utilities.h"
 
 int main()
@@ -9,6 +10,8 @@ int main()
 	Utilities_Setup();
 
 	Comms_Setup();
+
+	Tracking_Setup();
 
 	while (1) { Comms_Process(); }
 
