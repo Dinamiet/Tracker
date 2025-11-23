@@ -6,4 +6,6 @@
 void SMS_ReceivedNewMsg(ATTerminal* at, char* param);
 void SMS_MsgData(ATTerminal* at, char* param);
 
+void SMS_SendMsg(char* phoneNumber, char* msg);
+
 #endif
