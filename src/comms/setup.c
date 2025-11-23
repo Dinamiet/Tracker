@@ -1,6 +1,8 @@
 #include "comms.h"
+#include "gsm.h"
 #include "private.h"
 #include "serial.h"
+#include "sim868_gsm.h"
 #include "sim868_misc.h"
 #include "utilities.h"
 
@@ -8,8 +10,11 @@ ATTerminal*       atTerm;
 static ATTerminal AT;
 
 static ATTerminalResponseNotifier notifiers[] = {
-		{SIM868_MISC_RESPONSE_RDY,   Ready_Handler},
-		{					   0, Default_Handler}
+		{		 SIM868_MISC_RESPONSE_RDY,     Ready_Handler},
+		{		 SIM868_GSM_RESPONSE_FUNC,              NULL}, // Ignore
+		{		  SIM868_GSM_RESPONSE_PIN,              NULL}, // Ignore
+		{SIM868_GSM_RESPONSE_NETWORKCHANGE, GSM_NetworkChange},
+		{								0,   Default_Handler}
 };
 
 static size_t terminal_read_handler(void* data, size_t size);
