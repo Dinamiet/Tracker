@@ -1,8 +1,7 @@
+#include "aes.h"
+#include "comms.h"
 #include "http.h"
 #include "sim868_http.h"
-#include "comms.h"
-
-#include "aes.h"
 
 static uint8_t KEY[] = {};
 static uint8_t IV[] = {};
