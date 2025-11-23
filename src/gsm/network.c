@@ -3,7 +3,6 @@
 
 void GSM_NetworkChange(ATTerminal* at, char* param)
 {
-	(void)at;    // Unused
-	(void)param; // Unused
+	(void)at; // Unused
 	SIM868GSMNetworkInfo info = SIM868_GSM_ParseNetworkInfo(param);
 }
