@@ -100,4 +100,6 @@ target_link_libraries(
 	${PROJECT_NAME}
 	PRIVATE
 		SIM868
+		Observer
+		Cryptography
 )
