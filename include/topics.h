@@ -1,0 +1,11 @@
+#ifndef _TOPICS_H_
+#define _TOPICS_H_
+
+enum
+{
+	TOPIC_GPS_UPDATE,
+	TOPIC_CALL_INCOMMING,
+	TOPIC_SMS_RECEIVED,
+};
+
+#endif
