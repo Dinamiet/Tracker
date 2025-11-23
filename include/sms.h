@@ -3,6 +3,12 @@
 
 #include "atterminal.h"
 
+typedef struct _SMSMessage_
+{
+	char* Sender;
+	char  Message[128];
+} SMSMessage;
+
 void SMS_ReceivedNewMsg(ATTerminal* at, char* param);
 void SMS_MsgData(ATTerminal* at, char* param);
 

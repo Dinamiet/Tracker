@@ -1,5 +1,6 @@
 #include "sim868_sms.h"
 #include "sms.h"
+#include "utilities.h"
 
 #include <stdio.h>
 
@@ -13,8 +14,9 @@ void SMS_ReceivedNewMsg(ATTerminal* at, char* param)
 void SMS_MsgData(ATTerminal* at, char* param)
 {
 	SIM868SMSMessageInfo info         = SIM868_SMS_ParseMsgInfo(param);
-	char                 message[128] = {0};
-	SIM868_SMS_ReadMsg(at, message, info.Length);
+	SMSMessage           msg          = {.Sender = info.Sender, .Message = {0}};
+	SIM868_SMS_ReadMsg(at, msg.Message, info.Length);
 
-	printf("SMS from '%s': '%s'\n", info.Sender, message);
+	printf("SMS from '%s': '%s'\n", info.Sender, msg.Message);
+	Observer_Publish(notifier, TOPIC_SMS_RECEIVED, &msg);
 }

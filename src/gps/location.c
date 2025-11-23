@@ -1,5 +1,6 @@
 #include "gps.h"
 #include "sim868_gps.h"
+#include "utilities.h"
 
 #include <stdio.h>
 
@@ -11,6 +12,9 @@ void GPS_NewLocationInfo(ATTerminal* at, char* param)
 	gpsInfo = SIM868_GPS_ParseFixInfo(param);
 
 	printf("Location: %f %f\n", (double)gpsInfo.Latitude, (double)gpsInfo.Longitude);
+
+	GPSInfo info = GPS_GetInfo();
+	Observer_Publish(notifier, TOPIC_GPS_UPDATE, &info);
 }
 
 GPSInfo GPS_GetInfo()
