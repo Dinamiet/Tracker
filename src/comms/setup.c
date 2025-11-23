@@ -1,13 +1,15 @@
 #include "comms.h"
 #include "private.h"
 #include "serial.h"
+#include "sim868_misc.h"
 #include "utilities.h"
 
 ATTerminal*       atTerm;
 static ATTerminal AT;
 
 static ATTerminalResponseNotifier notifiers[] = {
-		{0, Default_Handler}
+		{SIM868_MISC_RESPONSE_RDY,   Ready_Handler},
+		{					   0, Default_Handler}
 };
 
 static size_t terminal_read_handler(void* data, size_t size);

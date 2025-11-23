@@ -3,6 +3,7 @@
 
 #include "comms.h"
 
+void Ready_Handler(ATTerminal* at, char* param);
 void Default_Handler(ATTerminal* at, char* param);
 
 #endif
