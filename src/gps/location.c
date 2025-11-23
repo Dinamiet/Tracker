@@ -1,12 +1,16 @@
 #include "gps.h"
 #include "sim868_gps.h"
 
+#include <stdio.h>
+
 static SIM868GPSInfo gpsInfo = {0};
 
 void GPS_NewLocationInfo(ATTerminal* at, char* param)
 {
 	(void)at; // Unused
 	gpsInfo = SIM868_GPS_ParseFixInfo(param);
+
+	printf("Location: %f %f\n", (double)gpsInfo.Latitude, (double)gpsInfo.Longitude);
 }
 
 GPSInfo GPS_GetInfo()

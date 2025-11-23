@@ -13,4 +13,6 @@ void SMS_MsgData(ATTerminal* at, char* param)
 	SIM868SMSMessageInfo info         = SIM868_SMS_ParseMsgInfo(param);
 	char                 message[128] = {0};
 	SIM868_SMS_ReadMsg(at, message, info.Length);
+
+	printf("SMS from '%s': '%s'\n", info.Sender, message);
 }
