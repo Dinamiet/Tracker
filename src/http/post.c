@@ -11,7 +11,21 @@ void HTTP_PostData(char* url, void* data, size_t size)
 		return;
 
 	AES aes;
-	AES_Init(&aes, IV, KEY, AES_256);
+	AES_Init(&aes, IV, SERVER_KEY, AES_256);
+
+	size_t encryptedSize = AES_CBC_Encrypt(&aes, data, size, true);
+
+	HTTP_SetBusy(true);
+	SIM868_HTTP_Post(atTerm, url, data, encryptedSize);
+}
+
+void HTTP_PostSecretData(char* url, void* data, size_t size)
+{
+	if (HTTP_IsBusy())
+		return;
+
+	AES aes;
+	AES_Init(&aes, IV, CLIENT_KEY, AES_256);
 
 	size_t encryptedSize = AES_CBC_Encrypt(&aes, data, size, true);
 
