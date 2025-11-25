@@ -1,6 +1,7 @@
 #include "tracking.h"
 
 #include "call.h"
+#include "comms.h"
 #include "config.h"
 #include "gps.h"
 #include "http.h"
@@ -22,6 +23,8 @@ static void gpsData_Handler(const void* data);
 static void callIncomming_Handler(const void* data);
 static void smsReceive_Handler(const void* data);
 
+static void sendNotification(const char* title, const char* message);
+
 static void movement_Handler(const void* data)
 {
 	const GPSInfo* info = data;
@@ -32,8 +35,8 @@ static void movement_Handler(const void* data)
 	{
 		if (stationary)
 		{
-			/** TODO: Post Moving notification */
 			printf("Moving\n");
+			sendNotification("Movement", "Moving");
 		}
 		stationary          = false;
 		stationaryStartTime = info->Timestamp;
@@ -44,9 +47,8 @@ static void movement_Handler(const void* data)
 		{
 			if (info->Timestamp - stationaryStartTime > CONFIG_STATIONARY_TIMEOUT)
 			{
-				/** TODO: Post Stationary notification */
 				printf("Stopped\n");
-
+				sendNotification("Movement", "Stopped");
 				stationary = true;
 			}
 		}
@@ -61,21 +63,33 @@ static void gpsData_Handler(const void* data)
 
 	size_t size = sprintf(payload, "{\"time\":%d,\"lat\":%f,\"lng\":%f}", info->Timestamp, info->Latitude, info->Longitude);
 
-	HTTP_PostData(url, payload, size);
+	HTTP_PostSecretData(url, payload, size);
 }
 
 static void callIncomming_Handler(const void* data)
 {
 	const char* number = data;
-	/** TODO: Post status data of incomming call */
-	(void)number; // Unused
+	printf("Call from %s\n", number);
+	sendNotification("Call", number);
 }
 
 static void smsReceive_Handler(const void* data)
 {
 	const SMSMessage* sms = data;
-	/** TODO: Post sms message */
-	(void)sms; // Unused
+	printf("SMS from %s: '%s'\n", sms->Sender, sms->Message);
+	sendNotification(sms->Sender, sms->Message);
+}
+
+static void sendNotification(const char* title, const char* message)
+{
+	char  payload[128];
+	char* url = CONFIG_NOTIFY_POST_URL CONFIG_DEVICE_NAME;
+
+	size_t size = sprintf(payload, "{\"title\":\"%s\",\"body\":\"%s\"}", title, message);
+
+	while (HTTP_IsBusy()) { Comms_Process(); }
+
+	HTTP_PostData(url, payload, size);
 }
 
 void Tracking_Setup()
