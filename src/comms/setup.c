@@ -12,10 +12,12 @@
 #include "sim868_misc.h"
 #include "sim868_sms.h"
 #include "sms.h"
+#include "tasks.h"
 #include "utilities.h"
 
 ATTerminal*       atTerm;
 static ATTerminal AT;
+static Scheduler  terminalTask;
 
 static ATTerminalResponseNotifier notifiers[] = {
 		{		   SIM868_MISC_RESPONSE_RDY,       Ready_Handler},
@@ -46,4 +48,6 @@ void Comms_Setup()
 {
 	atTerm = &AT;
 	ATTerminal_Init(atTerm, notifiers, terminal_read_handler, terminal_write_handler, Time_ms);
+
+	Scheduler_CreateRecurringTask(scheduler, &terminalTask, TASK_TERMINAL_PROCESS_ID, ATTerminal_Process, atTerm, 0);
 }

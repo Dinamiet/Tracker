@@ -120,4 +120,5 @@ target_link_libraries(
 		SIM868
 		Observer
 		Cryptography
+		Scheduler
 )

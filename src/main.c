@@ -15,7 +15,12 @@ int main()
 
 	Power_On();
 
-	while (1) { Comms_Process(); }
+	while (1)
+	{
+		SchedulerTask* nextTask = Scheduler_NextReady(scheduler);
+		Scheduler_Execute(nextTask);
+		Scheduler_Queue(scheduler, nextTask);
+	}
 
 	return 0;
 }
