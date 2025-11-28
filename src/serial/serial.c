@@ -1,9 +1,11 @@
+#if 0
 #include "serial.h"
+
 #include <fcntl.h>
-#include <termios.h>
-#include <unistd.h>
 #include <stdio.h>
 #include <string.h>
+#include <termios.h>
+#include <unistd.h>
 
 static int serial_fd = -1;
 
@@ -83,3 +85,50 @@ if (serial_fd < 0) {
 
     return (size_t)bytes_read;
 }
+
+#else
+
+#include "hardware/uart.h"
+#include "pico/stdlib.h"
+
+#include <stddef.h>
+#include <stdio.h>
+
+#define UART_ID   uart0
+#define BAUD_RATE 115200
+
+#define UART_TX_PIN 0
+#define UART_RX_PIN 1
+#define STD_OUT     8
+#define STD_IN      9
+
+void Serial_Setup()
+{
+	stdio_uart_init_full(uart1, BAUD_RATE, STD_OUT, STD_IN);
+
+	uart_init(UART_ID, BAUD_RATE);
+	gpio_set_function(UART_TX_PIN, UART_FUNCSEL_NUM(UART_ID, UART_TX_PIN));
+	gpio_set_function(UART_RX_PIN, UART_FUNCSEL_NUM(UART_ID, UART_RX_PIN));
+}
+
+size_t Serial_Write(const void* data, size_t length)
+{
+	uart_write_blocking(UART_ID, data, length);
+	return length;
+}
+
+size_t Serial_Read(void* _data, size_t length)
+{
+	uint8_t* data = _data;
+
+	size_t read = 0;
+	while (uart_is_readable_within_us(UART_ID, 100))
+	{
+		data[read++] = uart_getc(UART_ID);
+		if (read >= length)
+			break;
+	}
+	return read;
+}
+
+#endif

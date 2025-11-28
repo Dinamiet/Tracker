@@ -63,7 +63,7 @@ static void gpsData_Handler(const void* data)
 
 	printf("Location: %f %f\n", (double)info->Latitude, (double)info->Longitude);
 
-	size_t size = sprintf(payload, "{\"time\":%d,\"lat\":%f,\"lng\":%f}", info->Timestamp, info->Latitude, info->Longitude);
+	size_t size = sprintf(payload, "{\"time\":%ld,\"lat\":%f,\"lng\":%f}", info->Timestamp, info->Latitude, info->Longitude);
 
 	HTTP_PostSecretData(url, payload, size);
 }
