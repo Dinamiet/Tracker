@@ -61,6 +61,9 @@ static void gpsData_Handler(const void* data)
 	char           payload[128];
 	char* url = CONFIG_LOCATION_POST_URL CONFIG_DEVICE_NAME;
 
+	if (!info->HasFix)
+		return;
+
 	printf("Location: %f %f\n", (double)info->Latitude, (double)info->Longitude);
 
 	size_t size = sprintf(payload, "{\"time\":%ld,\"lat\":%f,\"lng\":%f}", info->Timestamp, info->Latitude, info->Longitude);
