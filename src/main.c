@@ -5,7 +5,7 @@
 
 int main()
 {
-	Serial_Setup("/dev/ttyUSB0");
+	Serial_Setup();
 
 	Utilities_Setup();
 

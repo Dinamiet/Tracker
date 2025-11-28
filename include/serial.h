@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <stddef.h>
 
-void Serial_Setup(const char* fileName);
+void   Serial_Setup();
 size_t Serial_Write(const void* data, size_t length);
 size_t Serial_Read(void* data, size_t length);
 

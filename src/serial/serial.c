@@ -9,10 +9,11 @@
 
 static int serial_fd = -1;
 
-void Serial_Setup(const char* fileName) {
+void Serial_Setup() {
 struct termios tty;
 
     // Open the serial port
+    char* fileName = "/dev/ttyUSB0";
     serial_fd = open(fileName, O_RDWR | O_NOCTTY | O_SYNC);
     if (serial_fd < 0) {
         perror("Error opening serial port");
