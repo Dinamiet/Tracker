@@ -14,4 +14,5 @@ void Utilities_Setup()
 	Observer_Init(notifier);
 	Scheduler_Init(scheduler, Time_ms);
 	Power_Setup();
+	HeartBeat_Setup();
 }
