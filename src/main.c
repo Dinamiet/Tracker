@@ -13,8 +13,6 @@ int main()
 
 	Tracking_Setup();
 
-	Power_On();
-
 	while (1)
 	{
 		SchedulerTask* nextTask = Scheduler_NextReady(scheduler);
