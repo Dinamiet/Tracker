@@ -10,5 +10,6 @@ extern Observer* notifier;
 
 void     Utilities_Setup();
 uint32_t Time_ms();
+void     Power_On();
 
 #endif

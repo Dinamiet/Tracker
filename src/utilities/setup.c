@@ -1,3 +1,4 @@
+#include "private.h"
 #include "utilities.h"
 
 Observer *notifier;
@@ -7,4 +8,5 @@ void Utilities_Setup()
 {
 	notifier = &ntfy;
 	Observer_Init(notifier);
+	Power_Setup();
 }

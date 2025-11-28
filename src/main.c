@@ -13,6 +13,8 @@ int main()
 
 	Tracking_Setup();
 
+	Power_On();
+
 	while (1) { Comms_Process(); }
 
 	return 0;
