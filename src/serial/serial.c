@@ -90,6 +90,7 @@ if (serial_fd < 0) {
 
 #include "hardware/uart.h"
 #include "pico/stdlib.h"
+#include "utilities.h"
 
 #include <stddef.h>
 #include <stdio.h>
@@ -124,6 +125,7 @@ size_t Serial_Read(void* _data, size_t length)
 	size_t read = 0;
 	while (uart_is_readable_within_us(UART_ID, 100))
 	{
+		Power_Alive();
 		data[read++] = uart_getc(UART_ID);
 		if (read >= length)
 			break;
