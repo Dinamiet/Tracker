@@ -1,4 +1,5 @@
 #include "gps.h"
+#include "gsm.h"
 #include "private.h"
 #include "sim868_misc.h"
 
@@ -12,7 +13,11 @@ void Ready_Handler(ATTerminal* at, char* param)
 	SIM868_Misc_CommandEcho(at, false);
 	printf("Device Ready\n");
 
-	GPS_Enable(true);
+	GSM_ResetState();
+	GPS_ResetState();
+
+	if (!GPS_Powered())
+		GPS_Enable(true);
 }
 
 void Default_Handler(ATTerminal* at, char* param)

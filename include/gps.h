@@ -14,6 +14,8 @@ typedef struct _GPSInfo_
 	float    Heading;
 } GPSInfo;
 
+void GPS_ResetState();
+
 void GPS_PowerChange(ATTerminal* at, char* param);
 void GPS_NewLocationInfo(ATTerminal* at, char* param);
 

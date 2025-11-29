@@ -1,6 +1,7 @@
 #include "aes.h"
 #include "comms.h"
 #include "config.h"
+#include "gsm.h"
 #include "http.h"
 #include "private.h"
 #include "secrets.h"
@@ -22,8 +23,11 @@ void HTTP_PostNotification(const char* title, const char* message)
 
 	size_t encryptedSize = AES_CBC_Encrypt(&aes, payload, size, true);
 
-	HTTP_SetBusy(true);
-	SIM868_HTTP_Post(atTerm, url, payload, encryptedSize);
+	if (GSM_InternetInitialized())
+	{
+		HTTP_SetBusy(true);
+		SIM868_HTTP_Post(atTerm, url, payload, encryptedSize);
+	}
 }
 
 void HTTP_PostLocation(const GPSInfo* info)
@@ -41,6 +45,9 @@ void HTTP_PostLocation(const GPSInfo* info)
 
 	size_t encryptedSize = AES_CBC_Encrypt(&aes, payload, size, true);
 
-	HTTP_SetBusy(true);
-	SIM868_HTTP_Post(atTerm, url, payload, encryptedSize);
+	if (GSM_InternetInitialized())
+	{
+		HTTP_SetBusy(true);
+		SIM868_HTTP_Post(atTerm, url, payload, encryptedSize);
+	}
 }
