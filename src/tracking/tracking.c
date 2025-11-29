@@ -23,8 +23,6 @@ static void gpsData_Handler(const void* data);
 static void callIncomming_Handler(const void* data);
 static void smsReceive_Handler(const void* data);
 
-static void sendNotification(const char* title, const char* message);
-
 static void movement_Handler(const void* data)
 {
 	const GPSInfo* info = data;
@@ -36,7 +34,7 @@ static void movement_Handler(const void* data)
 		if (stationary)
 		{
 			printf("Moving\n");
-			sendNotification("Movement", "Moving");
+			HTTP_PostNotification("Movement", "Moving");
 		}
 		stationary          = false;
 		stationaryStartTime = info->Timestamp;
@@ -48,7 +46,7 @@ static void movement_Handler(const void* data)
 			if (info->Timestamp - stationaryStartTime > CONFIG_STATIONARY_TIMEOUT)
 			{
 				printf("Stopped\n");
-				sendNotification("Movement", "Stopped");
+				HTTP_PostNotification("Movement", "Stopped");
 				stationary = true;
 			}
 		}
@@ -58,43 +56,30 @@ static void movement_Handler(const void* data)
 static void gpsData_Handler(const void* data)
 {
 	const GPSInfo* info = data;
-	char           payload[128];
-	char* url = CONFIG_LOCATION_POST_URL CONFIG_DEVICE_NAME;
 
 	if (!info->HasFix)
 		return;
 
-	printf("Location: %f %f\n", (double)info->Latitude, (double)info->Longitude);
+	printf("Location: %f %f %f\n", info->Latitude, info->Longitude, info->Speed);
 
-	size_t size = sprintf(payload, "{\"time\":%ld,\"lat\":%f,\"lng\":%f}", info->Timestamp, info->Latitude, info->Longitude);
+	if (stationary)
+		return;
 
-	HTTP_PostSecretData(url, payload, size);
+	HTTP_PostLocation(info);
 }
 
 static void callIncomming_Handler(const void* data)
 {
 	const char* number = data;
 	printf("Call from %s\n", number);
-	sendNotification("Call", number);
+	HTTP_PostNotification("Call", number);
 }
 
 static void smsReceive_Handler(const void* data)
 {
 	const SMSMessage* sms = data;
 	printf("SMS from %s: '%s'\n", sms->Sender, sms->Message);
-	sendNotification(sms->Sender, sms->Message);
-}
-
-static void sendNotification(const char* title, const char* message)
-{
-	char  payload[128];
-	char* url = CONFIG_NOTIFY_POST_URL CONFIG_DEVICE_NAME;
-
-	size_t size = sprintf(payload, "{\"title\":\"%s\",\"body\":\"%s\"}", title, message);
-
-	while (HTTP_IsBusy()) { Comms_Process(); }
-
-	HTTP_PostData(url, payload, size);
+	HTTP_PostNotification(sms->Sender, sms->Message);
 }
 
 void Tracking_Setup()
