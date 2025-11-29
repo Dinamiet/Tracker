@@ -26,8 +26,6 @@ static void smsReceive_Handler(const void* data);
 static void movement_Handler(const void* data)
 {
 	const GPSInfo* info = data;
-	if (!info->HasFix)
-		return;
 
 	if (info->Speed > CONFIG_STATIONARY_SPEED_THRESHOLD)
 	{
