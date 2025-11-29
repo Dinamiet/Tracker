@@ -31,9 +31,11 @@ void GSM_BearerConnectionStatus(ATTerminal* at, char* param)
 	if (info.Identifier != CONFIG_CONNECTION_ID)
 		return;
 
+	printf("Internet connection ");
 	switch (info.Status)
 	{
 		case SIM868_BEARER_STATUS_CLOSED:
+			printf("closed\n");
 			bearerInitialized = false;
 			GSM_InternetConnect(at);
 			break;
@@ -44,6 +46,7 @@ void GSM_BearerConnectionStatus(ATTerminal* at, char* param)
 			break;
 
 		case SIM868_BEARER_STATUS_CONNECTED:
+			printf("connected\n");
 			bearerInitialized = true;
 			break;
 	}
