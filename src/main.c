@@ -1,5 +1,6 @@
 #include "battery.h"
 #include "comms.h"
+#include "gsm.h"
 #include "serial.h"
 #include "tracking.h"
 #include "utilities.h"
@@ -16,6 +17,8 @@ int main()
 
 	Tracking_Setup();
 	Battery_Setup();
+
+	GSM_StartMonitor();
 
 	printf("Pico startup\n");
 
