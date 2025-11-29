@@ -1,7 +1,10 @@
+#include "battery.h"
 #include "comms.h"
 #include "serial.h"
 #include "tracking.h"
 #include "utilities.h"
+
+#include <stdio.h>
 
 int main()
 {
@@ -12,6 +15,9 @@ int main()
 	Comms_Setup();
 
 	Tracking_Setup();
+	Battery_Setup();
+
+	printf("Pico startup\n");
 
 	while (1)
 	{

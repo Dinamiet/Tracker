@@ -1,3 +1,4 @@
+#include "battery.h"
 #include "call.h"
 #include "comms.h"
 #include "gps.h"
@@ -34,6 +35,7 @@ static ATTerminalResponseNotifier notifiers[] = {
 		{		  SIM868_GPS_RESPONSE_POWER,     GPS_PowerChange},
 		{			SIM868_GPS_RESPONSE_FIX, GPS_NewLocationInfo},
 		{ SIM868_HTTP_RESPONSE_ACTION_STATUS,    HTTP_RequestDone},
+		{SIM868_MISC_RESPONSE_BATTERY_STATUS,        Battery_Info},
 		{								  0,     Default_Handler}
 };
 
