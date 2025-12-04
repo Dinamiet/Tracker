@@ -4,6 +4,7 @@
 #include "atterminal.h"
 
 void Battery_Setup();
+void Battery_RequestInfo();
 void Battery_Info(ATTerminal* at, char* param);
 
 #endif

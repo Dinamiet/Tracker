@@ -1,5 +1,6 @@
 #include "tracking.h"
 
+#include "battery.h"
 #include "call.h"
 #include "comms.h"
 #include "config.h"
@@ -71,6 +72,12 @@ static void callIncomming_Handler(const void* data)
 	const char* number = data;
 	printf("Call from %s\n", number);
 	HTTP_PostNotification("Call", number);
+	GPSInfo info = GPS_GetInfo();
+	while (HTTP_IsBusy()) { Comms_Process(); }
+	printf("Sending Location\n");
+	HTTP_PostLocation(&info);
+	printf("Requesting Battery info\n");
+	Battery_RequestInfo();
 }
 
 static void smsReceive_Handler(const void* data)

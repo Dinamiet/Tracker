@@ -1,8 +1,17 @@
 #include "battery.h"
+#include "comms.h"
 #include "http.h"
 #include "sim868_misc.h"
 
 #include <stdio.h>
+
+bool forceBatterySend = false;
+
+void Battery_RequestInfo()
+{
+	forceBatterySend = true;
+	SIM868_Misc_BatteryStatus(atTerm);
+}
 
 void Battery_Info(ATTerminal* at, char* param)
 {
@@ -11,9 +20,10 @@ void Battery_Info(ATTerminal* at, char* param)
 	SIM868MiscBatteryInfo info = SIM868_Misc_ParseBatteryInfo(param);
 	printf("Battery: %d %d%% %dV\n", info.Status, info.ChargeLevel, info.Voltage);
 
-	if (info.ChargeLevel < 20 || info.Voltage < 3500)
+	if (forceBatterySend || info.ChargeLevel < 20 || info.Voltage < 3500)
 	{
-		char msg[64] = {0};
+		forceBatterySend = false;
+		char msg[64]     = {0};
 		sprintf(msg, "%d %d%% %dV", info.Status, info.ChargeLevel, info.Voltage);
 		HTTP_PostNotification("Battery", msg);
 	}
