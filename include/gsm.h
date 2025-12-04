@@ -3,6 +3,11 @@
 
 #include "atterminal.h"
 
+void GSM_ResetState();
+
+void GSM_StartMonitor();
+void GSM_BearerConnectionStatus(ATTerminal* at, char* param);
+
 void GSM_EnableNetworkStatusUpdates(ATTerminal* at, bool enable);
 void GSM_NetworkChange(ATTerminal* at, char* param);
 

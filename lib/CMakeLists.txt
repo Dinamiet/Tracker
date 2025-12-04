@@ -33,8 +33,19 @@ FetchContent_Declare(
 		${CMAKE_SOURCE_DIR}/lib/Cryptography
 )
 
+FetchContent_Declare(
+	Scheduler
+	GIT_REPOSITORY
+		https://github.com/Dinamiet/Scheduler.git
+	GIT_TAG
+		main
+	SOURCE_DIR
+		${CMAKE_SOURCE_DIR}/lib/Scheduler
+)
+
 FetchContent_MakeAvailable(
 	SIM868
 	Observer
 	Cryptography
+	Scheduler
 )

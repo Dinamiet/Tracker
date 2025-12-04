@@ -1,10 +1,21 @@
-cmake_minimum_required(VERSION 4.1)
+cmake_minimum_required(VERSION 3.13)
+
+include(pico_sdk_import.cmake)
 
 project(
 	Tracker
 	VERSION
 		00.00
+	LANGUAGES
+		C
+		CXX
+		ASM
 )
+
+pico_sdk_init()
+
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 add_executable(
 	${PROJECT_NAME}
@@ -35,31 +46,31 @@ target_compile_options(
 	PRIVATE
 		"-Wall" # Enable all common warnings
 		"-Wextra" # Enable more warnings
-		"-Wpedantic" # Warn about non-standard code
+		# "-Wpedantic" # Warn about non-standard code
 		"-Werror" # Warnings are treated as errors
 		"-Wshadow" # Warn about shadow variables
 		# "-Wdouble-promotion" # Warn when promoting floats to doubles
-		"-Wformat=2" # printf and scanf warnings
-		"-Wformat-security" # printf and scanf warnings
-		"-Wformat-truncation" # printf and scanf warnings
-		"-Wundef" # Warn when evaluating not defined flags
+		# "-Wformat=2" # printf and scanf warnings
+		# "-Wformat-security" # printf and scanf warnings
+		# "-Wformat-truncation" # printf and scanf warnings
+		# "-Wundef" # Warn when evaluating not defined flags
 		"-fno-common" # Warn about multiple global variables with the same name
 		"-Wuninitialized" # Warn about uninitialized’ variables
 		#"-Wconversion" # Warn about implicit conversions
 		#"-Wpadded" # Warn about padded structures
-		"-flto" # Link time optimization
-		"-fno-fat-lto-objects" # Link time optimization
-		"-ffunction-sections" # Link time optimization help
-		"-fdata-sections" # Link time optimization help
-		"-fanalyzer" # Static analysis of program flow
+		# "-flto" # Link time optimization
+		# "-fno-fat-lto-objects" # Link time optimization
+		# "-ffunction-sections" # Link time optimization help
+		# "-fdata-sections" # Link time optimization help
+		# "-fanalyzer" # Static analysis of program flow
 )
 
 target_link_options(
 	${PROJECT_NAME}
 	PRIVATE
-		"-Wl,--gc-sections" # Remove unwanted/unused sections
-		"-flto" # Link time optimization
-		"-fno-fat-lto-objects" # Link time optimization
+		# "-Wl,--gc-sections" # Remove unwanted/unused sections
+		# "-flto" # Link time optimization
+		# "-fno-fat-lto-objects" # Link time optimization
 )
 
 configure_file("src/version.h.in" "version.h")
@@ -96,10 +107,18 @@ target_sources(
 
 add_subdirectory(lib)
 
+
+pico_enable_stdio_usb(${PROJECT_NAME} 1)
+pico_enable_stdio_uart(${PROJECT_NAME} 1)
+
+pico_add_extra_outputs(${PROJECT_NAME})
+
 target_link_libraries(
 	${PROJECT_NAME}
 	PRIVATE
+		pico_stdlib
 		SIM868
 		Observer
 		Cryptography
+		Scheduler
 )
