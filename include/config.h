@@ -3,16 +3,25 @@
 
 #define CONFIG_DEVICE_NAME ""
 
-#define CONFIG_CONNECTION_ID 1
-#define CONFIG_APN           "internet"
+#define CONFIG_CONNECTION_ID     1
+#define CONFIG_APN               "internet"
+#define CONFIG_HTTP_BUSY_TIMEOUT 5 // s
 
-#define CONFIG_GPS_FIX_INTERVAL 10
+#define CONFIG_GPS_FIX_INTERVAL 5
+#define CONFIG_POWER_TIMEOUT    5
 
 #define CONFIG_LINKED_PHONE ""
 
 #define CONFIG_LOCATION_POST_URL ""
+#define CONFIG_NOTIFY_POST_URL   ""
 
-#define CONFIG_STATIONARY_SPEED_THRESHOLD 5   // m/s
-#define CONFIG_STATIONARY_TIMEOUT         300 // seconds
+#define CONFIG_STATIONARY_SPEED_THRESHOLD     10      // m/s
+#define CONFIG_STATIONARY_TIMEOUT             300     // seconds
+#define CONFIG_FORCE_LOCATION_UPDATE_INTERVAL 1800000 // ms
+
+#define CONFIG_BATTERY_CHECK_PERIOD             300000 // ms
+#define CONFIG_INTERNET_CONNECTION_CHECK_PERIOD 300000 // ms
+
+#define CONFIG_WATCHDOG_TIMEOUT 7500 // ms
 
 #endif
