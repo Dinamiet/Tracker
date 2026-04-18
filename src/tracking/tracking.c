@@ -7,6 +7,7 @@
 #include "gps.h"
 #include "http.h"
 #include "sms.h"
+#include "tasks.h"
 #include "utilities.h"
 
 #include <stdio.h>
@@ -15,12 +16,15 @@ static ObserverSubscription movementSubcription;
 static ObserverSubscription gpsDataSubcription;
 static ObserverSubscription callIncommingSubscription;
 static ObserverSubscription smsReceivedSubscription;
+static SchedulerTask        forceUpdateTask;
 
 static bool     stationary          = false;
+static bool     forceLocationUpdate = false;
 static uint32_t stationaryStartTime = 0;
 
 static void movement_Handler(const void* data);
 static void gpsData_Handler(const void* data);
+static void forceUpdate_Handler(void* _);
 static void callIncomming_Handler(const void* data);
 static void smsReceive_Handler(const void* data);
 
@@ -61,10 +65,17 @@ static void gpsData_Handler(const void* data)
 
 	printf("Location: %f %f %f\n", info->Latitude, info->Longitude, info->Speed);
 
-	if (stationary)
+	if (stationary && !forceLocationUpdate)
 		return;
 
 	HTTP_PostLocation(info);
+	forceLocationUpdate = false;
+}
+
+static void forceUpdate_Handler(void* _)
+{
+	(void)_; // Unused
+	forceLocationUpdate = true;
 }
 
 static void callIncomming_Handler(const void* data)
@@ -93,4 +104,6 @@ void Tracking_Setup()
 	Observer_Subscribe(notifier, &gpsDataSubcription, TOPIC_GPS_UPDATE, gpsData_Handler);
 	Observer_Subscribe(notifier, &callIncommingSubscription, TOPIC_CALL_INCOMMING, callIncomming_Handler);
 	Observer_Subscribe(notifier, &smsReceivedSubscription, TOPIC_SMS_RECEIVED, smsReceive_Handler);
+
+	Scheduler_CreateRecurringTask(scheduler, &forceUpdateTask, TASK_FORCE_LOCATION_UPDATE, forceUpdate_Handler, NULL, CONFIG_FORCE_LOCATION_UPDATE_INTERVAL);
 }
